@@ -3,7 +3,9 @@ import zukeeper from 'zukeeper'
 
 const useApp = create(zukeeper((set) => ({
     maxSection: {},
+    message: null,
     getSectionStore: (payload) => set((state) => ({ maxSection: payload })),
+    setMessage: (payload) => set((state) => ({ message: payload }))
 })))
 
 // Solo para desarrollo
