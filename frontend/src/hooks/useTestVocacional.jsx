@@ -1,6 +1,9 @@
 import testVocacionalApi from "../api/testVocacionalApi";
+import useApp from "../store/store";
 
 const useTestVocacional = () => {
+  const maxSection = useApp((state) => state.maxSection);
+  const user = useApp((state) => state.user);
   const onLogin = (form) => {
     try {
       console.log(form);
@@ -27,10 +30,22 @@ const useTestVocacional = () => {
     }
   };
 
+  const getAllQuestionsByEscala = async () => {
+    try {
+      const { data } = await testVocacionalApi.post(`/areas`, {
+        form: maxSection,
+      });
+      return data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return {
     onLogin,
     getAllQuestions,
     getAllEscalas,
+    getAllQuestionsByEscala,
   };
 };
 
