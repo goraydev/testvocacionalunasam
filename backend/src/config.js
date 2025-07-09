@@ -1,0 +1,11 @@
+export const PORT = process.env.PORT || 3000;
+export const DB_USER = process.env.USER;
+export const DB_HOST = process.env.HOST;
+export const DB_PASSWORD = process.env.PASSWORD;
+export const DB_DATABASE = process.env.DATABASE;
+export const DB_PORT = process.env.DB_PORT;
+export const SECRET_JWT_SEED = process.env.SECRET_JWT_SEED;
+export const PETITION_API_DEV = process.env.PETITION_API_DEV;
+export const PETITION_API_PROD = process.env.PETITION_API_PROD;
+export const API_EMAIL_ADDRESS = process.env.API_EMAIL_ADDRESS;
+export const API_KEY_APP = process.env.API_KEY_APP;
