@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { sumBySection } from "../../helpers/sumBySection";
 import useApp from "../../store/store";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { getMaxSection } from "../../helpers/getMaxSection";
+import { FormSignIn } from "../../components/FormSigIn";
 const sections = [
   {
     id: 1,
@@ -145,6 +146,8 @@ const scaleOptions = [
 
 export const QuestionsPage = () => {
   const getSectionStore = useApp((state) => state.getSectionStore);
+  const user = useApp((state) => state.user);
+
   const navigate = useNavigate();
   const [currentSection, setCurrentSection] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -259,6 +262,23 @@ export const QuestionsPage = () => {
 
   return (
     <div className="max-w-4xl mx-auto">
+      <Link to={"/datos-generales"} className="flex items-center gap-2">
+        <i>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="1em"
+            height="1em"
+            className="text-black"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill="currentColor"
+              d="m9.55 12l7.35 7.35q.375.375.363.875t-.388.875t-.875.375t-.875-.375l-7.7-7.675q-.3-.3-.45-.675t-.15-.75t.15-.75t.45-.675l7.7-7.7q.375-.375.888-.363t.887.388t.375.875t-.375.875z"
+            />
+          </svg>
+        </i>
+        <p className="text-black font-bold">Regresar</p>
+      </Link>
       {/* Header */}
       <div className="text-center mb-8 pt-8">
         <div className="flex items-center justify-center mb-4">
@@ -282,6 +302,10 @@ export const QuestionsPage = () => {
             Test Vocacional
           </h1>
         </div>
+
+        <p className="text-center text-black font-bold text-xl">
+          {user?.estudiante}
+        </p>
         <p className="text-gray-600 text-lg max-w-2xl mx-auto">
           Descubre tu vocación profesional respondiendo estas preguntas sobre
           tus intereses y habilidades
@@ -365,7 +389,18 @@ export const QuestionsPage = () => {
             variant="outline"
             className="flex items-center space-x-2 px-6 py-3 border-2 border-gray-300 hover:border-blue-400 hover:text-blue-600 disabled:opacity-50 bg-transparent"
           >
-            <div className="w-4 h-4" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="1em"
+              height="1em"
+              viewBox="0 0 24 24"
+              className="text-blue-500"
+            >
+              <path
+                fill="currentColor"
+                d="m9.55 12l7.35 7.35q.375.375.363.875t-.388.875t-.875.375t-.875-.375l-7.7-7.675q-.3-.3-.45-.675t-.15-.75t.15-.75t.45-.675l7.7-7.7q.375-.375.888-.363t.887.388t.375.875t-.375.875z"
+              />
+            </svg>
             <span className="text-blue-500">Anterior</span>
           </button>
 
@@ -401,7 +436,17 @@ export const QuestionsPage = () => {
                 ? "Finalizar"
                 : "Siguiente"}
             </span>
-            <div className="w-4 h-4" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="1em"
+              height="1em"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="currentColor"
+                d="m14.475 12l-7.35-7.35q-.375-.375-.363-.888t.388-.887t.888-.375t.887.375l7.675 7.7q.3.3.45.675t.15.75t-.15.75t-.45.675l-7.7 7.7q-.375.375-.875.363T7.15 21.1t-.375-.888t.375-.887z"
+              />
+            </svg>
           </button>
         </div>
       </div>

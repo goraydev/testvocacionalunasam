@@ -12,11 +12,10 @@ export const HomePage = () => {
         src="https://lottie.host/721b915d-4a74-4059-ab28-526122d9ae2c/FVa7Cb93dh.lottie"
         loop
         autoplay
-        className="min-w-auto md:h-96"
       />
 
       <Link
-        to={"/preguntas"}
+        to={"/datos-generales"}
         className="btn inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-10 px-4 py-2 text-white border-0 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 shadow-lg shadow-cyan-500/25 transition-color"
       >
         Empezar cuestionario

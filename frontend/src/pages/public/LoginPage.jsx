@@ -1,4 +1,4 @@
-import { FormSignIn } from "../../components/FormSigIn";
+import { FormStudent } from "./FormStudent";
 
 export const LoginPage = () => {
   return (
@@ -9,7 +9,7 @@ export const LoginPage = () => {
       <p className="text-xl text-center md:text-3xl lg:text-4xl bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent font-medium">
         Inicia Sesión
       </p>
-      <FormSignIn />
+      <FormStudent />
     </>
   );
 };
