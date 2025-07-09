@@ -4,6 +4,8 @@ import useApp from "../store/store";
 const useTestVocacional = () => {
   const maxSection = useApp((state) => state.maxSection);
   const user = useApp((state) => state.user);
+  const answers = useApp((state) => state.answers);
+  const sumSections = useApp((state) => state.sumSections);
   const onLogin = (form) => {
     try {
       console.log(form);
@@ -32,6 +34,11 @@ const useTestVocacional = () => {
 
   const getAllQuestionsByEscala = async () => {
     try {
+      console.log("usuerio", user);
+      console.log("sumSections", sumSections);
+      console.log("answers", answers);
+      console.log("maxSection", maxSection);
+
       const { data } = await testVocacionalApi.post(`/areas`, {
         form: maxSection,
       });

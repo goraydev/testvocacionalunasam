@@ -1,13 +1,13 @@
-export const getMaxSection = (dataSumSections) => {
+export const getMaxSection = (sectionScores) => {
   let maxSum = -1;
   let maxSections = [];
 
-  for (const [section, sum] of Object.entries(dataSumSections)) {
-    if (sum > maxSum) {
-      maxSum = sum;
-      maxSections = [{ section, sum }];
-    } else if (sum === maxSum) {
-      maxSections.push({ section, sum });
+  for (const { section_id, score } of sectionScores) {
+    if (score > maxSum) {
+      maxSum = score;
+      maxSections = [{ section_id, score }];
+    } else if (score === maxSum) {
+      maxSections.push({ section_id, score });
     }
   }
 

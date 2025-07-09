@@ -6,10 +6,13 @@ const useApp = create(
     maxSection: {},
     message: null,
     user: {},
-    getSectionStore: (payload) => set((state) => ({ maxSection: payload })),
+    answers: {},
+    sumSections: {},
     setMessage: (payload) => set((state) => ({ message: payload })),
     setUser: (payload) => set((state) => ({ user: payload })),
     setMaxSections: (payload) => set((state) => ({ maxSection: payload })),
+    setAnswersStore: (payload) => set((state) => ({ answers: payload })),
+    setSumSections: (payload) => set((state) => ({ sumSections: payload })),
   }))
 );
 

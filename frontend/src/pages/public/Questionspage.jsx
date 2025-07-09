@@ -7,9 +7,10 @@ import { getMaxSection } from "../../helpers/getMaxSection";
 import useTestVocacional from "../../hooks/useTestVocacional";
 
 export const QuestionsPage = () => {
-  const { getAllQuestions, getAllEscalas } = useTestVocacional();
-  const { getAllQuestionsByEscala } = useTestVocacional();
   const setMaxSections = useApp((state) => state.setMaxSections);
+  const setSumSections = useApp((state) => state.setSumSections);
+  const setAnswersStore = useApp((state) => state.setAnswersStore);
+  const { getAllQuestions, getAllEscalas } = useTestVocacional();
 
   const { isLoading, data: sections = [] } = useQuery({
     queryKey: ["sections"],
@@ -20,8 +21,6 @@ export const QuestionsPage = () => {
     queryKey: ["scaleOptions"],
     queryFn: getAllEscalas,
   });
-
-  const getSectionStore = useApp((state) => state.getSectionStore);
   const user = useApp((state) => state.user);
 
   const navigate = useNavigate();
@@ -66,9 +65,9 @@ export const QuestionsPage = () => {
   };
 
   const handleSubmit = () => {
-    console.log("Respuestas del test:", answers);
+    setAnswersStore(answers);
     const resultSumaSections = sumBySection(answers);
-    console.log(resultSumaSections);
+    setSumSections(resultSumaSections);
     const maxSection = getMaxSection(resultSumaSections);
     setMaxSections(maxSection);
     navigate("/resultado");
