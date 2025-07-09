@@ -1,150 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { sumBySection } from "../../helpers/sumBySection";
 import useApp from "../../store/store";
 import { Link, useNavigate } from "react-router";
 import { getMaxSection } from "../../helpers/getMaxSection";
-import { FormSignIn } from "../../components/FormSigIn";
-const sections = [
-  {
-    id: 1,
-    title: "Intereses Científicos",
-    description: "Evalúa tu afinidad hacia las ciencias y la investigación",
-    questions: [
-      "Me gusta resolver problemas matemáticos complejos",
-      "Disfruto realizando experimentos científicos",
-      "Me interesa entender cómo funcionan las cosas",
-      "Me atrae la investigación y el análisis de datos",
-      "Me fascina el mundo de la tecnología",
-      "Me gusta observar y analizar fenómenos naturales",
-    ],
-  },
-  {
-    id: 2,
-    title: "Habilidades Artísticas",
-    description: "Explora tu creatividad y expresión artística",
-    questions: [
-      "Me gusta crear obras de arte visual",
-      "Disfruto escribiendo historias o poemas",
-      "Me siento cómodo actuando frente a otros",
-      "Me gusta diseñar y decorar espacios",
-      "Tengo facilidad para tocar instrumentos musicales",
-      "Me atrae la fotografía y el diseño gráfico",
-    ],
-  },
-  {
-    id: 3,
-    title: "Liderazgo y Comunicación",
-    description: "Evalúa tus habilidades de liderazgo y comunicación",
-    questions: [
-      "Me siento cómodo dirigiendo equipos de trabajo",
-      "Disfruto hablando en público",
-      "Me gusta organizar eventos y actividades",
-      "Tengo facilidad para convencer a otros",
-      "Me siento natural ayudando a resolver conflictos",
-      "Me gusta enseñar y explicar conceptos a otros",
-    ],
-  },
-  {
-    id: 4,
-    title: "Trabajo Social",
-    description: "Mide tu interés en ayudar y servir a la comunidad",
-    questions: [
-      "Me motiva ayudar a personas en situaciones difíciles",
-      "Me interesa trabajar con niños y adolescentes",
-      "Disfruto participando en actividades de voluntariado",
-      "Me preocupo por los problemas sociales",
-      "Me gusta escuchar y aconsejar a otros",
-      "Me atrae trabajar en organizaciones benéficas",
-    ],
-  },
-  {
-    id: 5,
-    title: "Emprendimiento",
-    description: "Evalúa tu espíritu emprendedor y empresarial",
-    questions: [
-      "Me gusta crear nuevos proyectos desde cero",
-      "Disfruto tomando riesgos calculados",
-      "Me interesa el mundo de los negocios",
-      "Me atrae la idea de ser mi propio jefe",
-      "Tengo facilidad para identificar oportunidades",
-      "Me gusta negociar y cerrar acuerdos",
-    ],
-  },
-  {
-    id: 6,
-    title: "Trabajo Manual",
-    description: "Explora tu afinidad hacia actividades prácticas",
-    questions: [
-      "Disfruto construyendo cosas con mis manos",
-      "Me gusta reparar objetos descompuestos",
-      "Me siento cómodo usando herramientas",
-      "Prefiero trabajar con materiales tangibles",
-      "Me atrae la carpintería o la mecánica",
-      "Disfruto los proyectos de bricolaje",
-    ],
-  },
-  {
-    id: 7,
-    title: "Análisis y Planificación",
-    description: "Mide tu capacidad analítica y de organización",
-    questions: [
-      "Me gusta planificar actividades con detalle",
-      "Disfruto analizando datos y estadísticas",
-      "Me siento cómodo manejando presupuestos",
-      "Me atrae organizar sistemas y procesos",
-      "Tengo facilidad para detectar errores",
-      "Me gusta crear cronogramas y horarios",
-    ],
-  },
-  {
-    id: 8,
-    title: "Cuidado de la Salud",
-    description: "Evalúa tu interés en el bienestar y la salud",
-    questions: [
-      "Me interesa el funcionamiento del cuerpo humano",
-      "Disfruto cuidando de personas enfermas",
-      "Me atrae la medicina y los tratamientos",
-      "Me preocupo por la salud mental de otros",
-      "Me gusta promover hábitos saludables",
-      "Me interesa la investigación médica",
-    ],
-  },
-  {
-    id: 9,
-    title: "Naturaleza y Ambiente",
-    description: "Explora tu conexión con el medio ambiente",
-    questions: [
-      "Me gusta pasar tiempo al aire libre",
-      "Me preocupa la conservación del medio ambiente",
-      "Disfruto estudiando plantas y animales",
-      "Me atrae la agricultura y la jardinería",
-      "Me interesa la sostenibilidad ambiental",
-      "Me gusta explorar espacios naturales",
-    ],
-  },
-  {
-    id: 10,
-    title: "Tecnología e Innovación",
-    description: "Mide tu afinidad hacia la tecnología moderna",
-    questions: [
-      "Me fascina la programación y el desarrollo",
-      "Disfruto usando nuevas tecnologías",
-      "Me atrae el diseño de aplicaciones",
-      "Me interesa la inteligencia artificial",
-      "Me gusta automatizar procesos",
-      "Me siento cómodo con dispositivos digitales",
-    ],
-  },
-];
-const scaleOptions = [
-  { value: "1", label: "Totalmente en desacuerdo" },
-  { value: "2", label: "En desacuerdo" },
-  { value: "3", label: "Neutral" },
-  { value: "4", label: "De acuerdo" },
-  { value: "5", label: "Totalmente de acuerdo" },
-];
+import useTestVocacional from "../../hooks/useTestVocacional";
 
 export const QuestionsPage = () => {
+  const { getAllQuestions, getAllEscalas } = useTestVocacional();
+
+  const { isLoading, data: sections = [] } = useQuery({
+    queryKey: ["sections"],
+    queryFn: getAllQuestions,
+  });
+
+  const { isLoading: isloadingScales, data: scaleOptions } = useQuery({
+    queryKey: ["scaleOptions"],
+    queryFn: getAllEscalas,
+  });
+
   const getSectionStore = useApp((state) => state.getSectionStore);
   const user = useApp((state) => state.user);
 
@@ -152,14 +26,19 @@ export const QuestionsPage = () => {
   const [currentSection, setCurrentSection] = useState(0);
   const [answers, setAnswers] = useState({});
   const [isCompleted, setIsCompleted] = useState(false);
-  const progress = ((currentSection + 1) / sections.length) * 100;
-  const currentSectionData = sections[currentSection];
+  const progress = sections.length
+    ? ((currentSection + 1) / sections.length) * 100
+    : 0;
+  const currentSectionData = sections[currentSection] || {
+    question: [],
+    title: "",
+  };
 
   const handleAnswerChange = (questionIndex, value) => {
     const questionKey = `section_${currentSection}_question_${questionIndex}`;
     setAnswers((prev) => ({
       ...prev,
-      [questionKey]: value,
+      [questionKey]: Number(value),
     }));
   };
 
@@ -194,6 +73,24 @@ export const QuestionsPage = () => {
     alert("¡Test completado! Revisa la consola para ver las respuestas.");
     navigate("/resultado");
   };
+
+  if (isLoading || isloadingScales) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-lg text-gray-600">Cargando preguntas...</p>
+      </div>
+    );
+  }
+
+  if (sections.length === 0 || scaleOptions.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-lg text-red-500">
+          No se pudo cargar el test o las opciones.
+        </p>
+      </div>
+    );
+  }
 
   if (isCompleted) {
     return (
@@ -332,9 +229,6 @@ export const QuestionsPage = () => {
             <div className="w-6 h-6 mr-3" />
             <div className="text-2xl font-bold">{currentSectionData.title}</div>
           </div>
-          <div className="text-purple-100 text-lg">
-            {currentSectionData.description}
-          </div>
         </div>
 
         <div className="p-8">
@@ -350,7 +244,7 @@ export const QuestionsPage = () => {
                     {questionIndex + 1}. {question}
                   </h3>
                   <div className="space-y-3">
-                    {scaleOptions.map((option) => (
+                    {scaleOptions?.map((option) => (
                       <div
                         key={option.value}
                         className="flex items-center space-x-3"
@@ -453,7 +347,7 @@ export const QuestionsPage = () => {
 
       {/* Section Navigation */}
       <div className="mt-8 grid grid-cols-2 sm:grid-cols-5 lg:grid-cols-10 gap-2">
-        {sections.map((section, index) => {
+        {sections?.map((section, index) => {
           const sectionAnswers = section.questions.every((_, qIndex) => {
             const questionKey = `section_${index}_question_${qIndex}`;
             return answers[questionKey];
