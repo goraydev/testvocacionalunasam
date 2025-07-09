@@ -1,8 +1,8 @@
--- Tabla de roles (sin dependencias)
-CREATE TABLE IF NOT EXISTS "roles" (
-    "id" SERIAL PRIMARY KEY,
-    "rol" VARCHAR(50) NOT NULL UNIQUE
-);
+    -- Tabla de roles (sin dependencias)
+    CREATE TABLE IF NOT EXISTS "roles" (
+        "id" SERIAL PRIMARY KEY,
+        "rol" VARCHAR(50) NOT NULL UNIQUE
+    );
 
 -- Tabla de usuarios (depende de roles)
 CREATE TABLE IF NOT EXISTS "users" (
@@ -326,3 +326,37 @@ GROUP BY
     a.id, a.area, a.interpretation
 ORDER BY
     a.id;
+
+
+--vista de areas filtradas por seccion
+CREATE OR REPLACE FUNCTION get_areas_by_sections(p_sections TEXT[])
+RETURNS TABLE (
+    id INT,
+    section VARCHAR(10),
+    title VARCHAR(100),
+    area VARCHAR(50),
+    interpretation TEXT,
+    created_at TIMESTAMPTZ,
+    updated_at TIMESTAMPTZ
+)
+AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        a.id,
+        a.section,
+        a.title,
+        a.area,
+        a.interpretation,
+        a.created_at,
+        a.updated_at
+    FROM areas a
+    WHERE a.section = ANY(p_sections);
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+
+-- Para buscar 'A', 'B' y 'C'
+SELECT * FROM get_areas_by_sections(ARRAY['A']);
