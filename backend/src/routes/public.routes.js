@@ -6,6 +6,6 @@ import { getAreasBySection } from "../controllers/areas.controllers.js";
 const router = Router();
 router.get("/preguntas", getAllQuestions);
 router.get("/escalas", getAllScaleOptions);
-router.get("/areas", getAreasBySection);
+router.post("/areas", getAreasBySection);
 
 export default router;

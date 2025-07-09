@@ -1,8 +1,10 @@
 import { pool } from "../db.js";
 
 export const getAreasBySection = async (req, res) => {
-  const sections = req.body || [];
-  const filters = sections.map((area) => area.section);
+  console.log(req.body);
+  const { form } = req.body;
+  const sections = form || [];
+  const filters = sections?.map((area) => area.section);
 
   try {
     const result = await pool.query("SELECT * FROM get_areas_by_sections($1)", [
