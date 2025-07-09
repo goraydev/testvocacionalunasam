@@ -311,4 +311,18 @@ INSERT INTO "interest_levels" ("level_name", "lower_limit", "upper_limit") VALUE
 ('Rechazo total', 6, 9);
 
 
-
+--Vista de todas las preguntas por seccion
+CREATE OR REPLACE VIEW allquestions AS
+SELECT
+    a.id,
+    a.area AS title,
+    a.interpretation AS interpretation,
+    json_agg(q.question ORDER BY q.order_number) AS questions
+FROM
+    areas a
+INNER JOIN
+    questions q ON q.section_id = a.section
+GROUP BY
+    a.id, a.area, a.interpretation
+ORDER BY
+    a.id;
