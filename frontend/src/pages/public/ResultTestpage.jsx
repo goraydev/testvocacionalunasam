@@ -1,9 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import useApp from "../../store/store";
 import useTestVocacional from "../../hooks/useTestVocacional";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 export const ResultTestPage = () => {
+  const userStudent = useApp((state) => state.userStudent);
+  const message = useApp((state) => state.message);
+  const modalRef = useRef();
   const { createUserStudent } = useTestVocacional();
   const user = useApp((state) => state.user);
   const { getAllQuestionsByEscala } = useTestVocacional();
@@ -12,8 +15,9 @@ export const ResultTestPage = () => {
     queryFn: getAllQuestionsByEscala,
   });
 
-  const handleSubmit = () => {
-    createUserStudent();
+  const handleSubmit = async () => {
+    await createUserStudent();
+    modalRef.current?.showModal();
   };
 
   if (isLoading) {
@@ -48,14 +52,40 @@ export const ResultTestPage = () => {
             </div>
           ))}
         </div>
-        <button
-          type="button"
-          onClick={handleSubmit}
-          className="my-10 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-3 text-lg font-semibold rounded-xl shadow-lg transform transition-all duration-200 hover:scale-105"
-        >
-          Guardar resultado
-        </button>
+        {!userStudent?.user && (
+          <button
+            type="button"
+            onClick={handleSubmit}
+            className="my-10 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-3 text-lg font-semibold rounded-xl shadow-lg transform transition-all duration-200 hover:scale-105"
+          >
+            Guardar resultado
+          </button>
+        )}
       </section>
+
+      {/* modal */}
+      <dialog
+        id="my_modal_5"
+        className="modal modal-middle sm:modal-middle"
+        ref={modalRef}
+      >
+        <div className="modal-box bg-gradient-to-r bg-gray-800 backdrop-blur-3xl ">
+          <h3 className="font-bold text-lg text-center">
+            Guardado exitosamente
+          </h3>
+          <p className="py-4">
+            Si quieres ver tus resultados, puedes iniciar sesión
+            con usuario <span className="font-bold">{userStudent?.user}</span> y
+            contraseña <span className="font-bold">{userStudent?.user}</span>
+          </p>
+          <div className="modal-action">
+            <form method="dialog">
+              {/* if there is a button in form, it will close the modal */}
+              <button className="btn">Cerrar</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
     </>
   );
 };

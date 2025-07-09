@@ -6,6 +6,8 @@ const useTestVocacional = () => {
   const user = useApp((state) => state.user);
   const answers = useApp((state) => state.answers);
   const sumSections = useApp((state) => state.sumSections);
+  const setUserStudent = useApp((state) => state.setUserStudent);
+  const setMessage = useApp((state) => state.setMessage);
   const onLogin = (form) => {
     try {
       console.log(form);
@@ -56,12 +58,14 @@ const useTestVocacional = () => {
         sumSections,
       });
 
-      console.log(data);
-
-      return data;
-      
+      setUserStudent(data);
     } catch (error) {
       console.error(error);
+      setMessage({ ok: false, msg: error.response.data.message });
+      setTimeout(() => {
+        setMessage(null);
+      }, 3000);
+      throw new Error(`Eror al crear usuario, ${error}`);
     }
   };
 
