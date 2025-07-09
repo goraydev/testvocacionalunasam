@@ -8,7 +8,7 @@
 CREATE TABLE IF NOT EXISTS "users" (
     "id" SERIAL PRIMARY KEY,
     "username" VARCHAR(50) NOT NULL UNIQUE,
-    "email" VARCHAR(100) NOT NULL UNIQUE,
+    "email" VARCHAR(100),
     "password" VARCHAR(255) NOT NULL,
     "is_active" BOOLEAN NOT NULL DEFAULT true,
     "rol_id" INTEGER NOT NULL REFERENCES "roles"("id") ON DELETE RESTRICT,
@@ -360,3 +360,78 @@ $$ LANGUAGE plpgsql;
 
 -- Para buscar 'A', 'B' y 'C'
 SELECT * FROM get_areas_by_sections(ARRAY['A']);
+
+
+
+--PARA ALMACENAR ESTUDIANTE, CREAR CUENTA, GUARDAR TESTS Y RESULTADOS
+CREATE OR REPLACE FUNCTION insert_student_with_results(
+    p_username VARCHAR,
+    p_email VARCHAR,
+    p_password VARCHAR,
+    p_rol_id INTEGER,
+    p_student_name VARCHAR,
+    p_age INTEGER,
+    p_degree INTEGER,
+    p_observations TEXT,
+    p_total_score INTEGER,
+    p_dominant_area VARCHAR,
+    p_test_version VARCHAR,
+    p_section_results JSON
+)
+RETURNS VARCHAR
+AS $$
+DECLARE
+    v_user_id INTEGER;
+    v_student_id INTEGER;
+    v_session_id INTEGER;
+    v_section JSON;
+    v_section_id VARCHAR(10);
+    v_score INTEGER;
+    v_interest_level VARCHAR(30);
+BEGIN
+    -- 1. Insertar usuario
+    INSERT INTO users(username, email, password, rol_id)
+    VALUES (p_username, p_email, p_password, p_rol_id)
+    RETURNING id INTO v_user_id;
+
+    -- 2. Insertar estudiante
+    INSERT INTO students(student_name, age, degree, observations, user_id)
+    VALUES (p_student_name, p_age, p_degree, p_observations, v_user_id)
+    RETURNING id INTO v_student_id;
+
+    -- 3. Insertar sesión de test
+    INSERT INTO test_sessions(student_id, total_score, dominant_area, test_version)
+    VALUES (v_student_id, p_total_score, p_dominant_area, p_test_version)
+    RETURNING id INTO v_session_id;
+
+    -- 4. Insertar resultados por sección (desde JSON)
+    FOR v_section IN SELECT * FROM json_array_elements(p_section_results)
+    LOOP
+        v_section_id := v_section->>'section_id';
+        v_score := (v_section->>'score')::INTEGER;
+
+        -- Obtener nivel de interés
+        v_interest_level := calculate_interest_level(v_score);
+
+        INSERT INTO section_results(student_id, section_id, session_id, score, level_interest)
+        VALUES (v_student_id, v_section_id, v_session_id, v_score, v_interest_level);
+    END LOOP;
+	RETURN p_username;
+END;
+$$ LANGUAGE plpgsql;
+
+SELECT insert_student_with_results(
+  'juan123',                    -- p_username
+  'juan@example.com',          -- p_email
+  'hashedpassword123',         -- p_password (idealmente ya hasheado)
+  2,                           -- p_rol_id
+  'Juan Pérez',                -- p_student_name
+  18,                          -- p_age
+  5,                           -- p_degree
+  'Sin observaciones',         -- p_observations
+  180,                         -- p_total_score
+  'LITERARIO',                -- p_dominant_area
+  '1.0',                       -- p_test_version
+  '[{"section_id":"A","score":21},{"section_id":"B","score":18}]'::JSON -- p_section_results
+);
+
