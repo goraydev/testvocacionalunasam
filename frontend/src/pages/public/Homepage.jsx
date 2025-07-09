@@ -7,10 +7,12 @@ export const HomePage = () => {
       <h1 className="text-4xl text-center font-bold bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent my-10">
         Bienvenido a la aplicación de Test Vocacional UNASAM
       </h1>
+
       <DotLottieReact
-        src="https://lottie.host/e266f8d7-b3aa-440a-8103-fb0b63b0654d/vZCWGBLzyQ.lottie"
+        src="https://lottie.host/721b915d-4a74-4059-ab28-526122d9ae2c/FVa7Cb93dh.lottie"
         loop
         autoplay
+        className="min-w-auto md:h-96"
       />
 
       <Link
