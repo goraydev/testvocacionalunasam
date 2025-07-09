@@ -18,7 +18,7 @@ export const sumBySection = (data) => {
         const sectionMatch = key.match(/section_(\d+)_/);
         if (sectionMatch) {
             const sectionNumber = parseInt(sectionMatch[1]);
-            const sectionKey = `section_${sections[sectionNumber]}`;
+            const sectionKey = `${sections[sectionNumber]}`;
 
             if (!sectionSums[sectionKey]) {
                 sectionSums[sectionKey] = 0;

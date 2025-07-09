@@ -9,6 +9,7 @@ export const FormStudent = () => {
   const setMessage = useApp((state) => state.setMessage);
   const message = useApp((state) => state.message);
   const navigate = useNavigate();
+
   const [estudiante, setEstudiante] = useState("");
   const [edad, setEdad] = useState("");
   const [grado, setGrado] = useState("");
@@ -61,7 +62,7 @@ export const FormStudent = () => {
       <section className="grid md:grid-cols-2 items-center justify-center">
         <img src={datosGenerales} alt="Sign In" width={600} height={600} />
         <section>
-          <p className="flex items-center justify-center mt-6 text-center text-black font-bold">
+          <p className="flex items-center justify-center mt-6 text-center text-black font-bold text-2xl">
             "Complete sus datos generales para iniciar con las preguntas"
           </p>
           {message !== null && !message.ok ? (
