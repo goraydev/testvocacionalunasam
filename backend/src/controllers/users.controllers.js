@@ -74,6 +74,10 @@ export const createAccountUserStudent = async (req, res) => {
   const userNameStudent = createUserNameStudent(user);
   const userPassword = createUserNameStudent(user);
 
+  //Encriptar password
+  const salt = bcrypt.genSaltSync();
+  const passwordHash = bcrypt.hashSync(userPassword, salt);
+
   try {
     const result = await pool.query(
       `SELECT insert_student_with_results(
@@ -82,7 +86,7 @@ export const createAccountUserStudent = async (req, res) => {
       [
         userNameStudent,
         "",
-        userPassword,
+        passwordHash,
         1,
         user.student,
         user.age,
