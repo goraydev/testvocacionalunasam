@@ -34,15 +34,32 @@ const useTestVocacional = () => {
 
   const getAllQuestionsByEscala = async () => {
     try {
-      console.log("usuerio", user);
-      console.log("sumSections", sumSections);
-      console.log("answers", answers);
-      console.log("maxSection", maxSection);
-
       const { data } = await testVocacionalApi.post(`/areas`, {
         form: maxSection,
       });
+
       return data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const createUserStudent = async () => {
+    try {
+      const getAreasBySection = await getAllQuestionsByEscala();
+      const getDominantArea = getAreasBySection[0].area;
+
+      const { data } = await testVocacionalApi.post(`/usuarios-estudiante`, {
+        user: { student: user.estudiante, age: user.edad, degree: user.grado },
+        total_score_max: maxSection[0].score,
+        getDominantArea,
+        sumSections,
+      });
+
+      console.log(data);
+
+      return data;
+      
     } catch (error) {
       console.error(error);
     }
@@ -53,6 +70,7 @@ const useTestVocacional = () => {
     getAllQuestions,
     getAllEscalas,
     getAllQuestionsByEscala,
+    createUserStudent,
   };
 };
 
