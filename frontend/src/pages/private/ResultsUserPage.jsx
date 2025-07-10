@@ -25,7 +25,7 @@ export const ResultsUserPage = () => {
       <p className="text-gray-800 text-xl">
         Test vocacional realizado el {transformDate(data.test_date)}
       </p>
-      <h1 className="text-4xl text-center font-bold bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent my-1">
+      <h1 className="text-4xl text-center font-bold bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent pb-2">
         {data?.student_name} tu perfil es
       </h1>
       <div className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white p-8 rounded-md">
