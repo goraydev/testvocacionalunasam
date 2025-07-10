@@ -11,6 +11,7 @@ const useTestVocacional = () => {
   const sumSections = useApp((state) => state.sumSections);
   const setUserStudent = useApp((state) => state.setUserStudent);
   const setMessage = useApp((state) => state.setMessage);
+  const existStudent = useApp((state) => state.existStudent);
 
   const navigate = useNavigate();
 
@@ -145,6 +146,24 @@ const useTestVocacional = () => {
     }
   };
 
+  const getUserStudentResults = async () => {
+    const { id_student } = existStudent;
+    
+    try {
+       const { data } = await testVocacionalApi.get(
+        `/estudiantes/${id_student}/reporte`
+      );
+      
+      return data; 
+    } catch (error) {
+      console.error(error);
+      setMessage({ ok: false, msg: error.response.data.message });
+      setTimeout(() => {
+        setMessage(null);
+      }, 3000);
+    }
+  };
+
   return {
     onLogin,
     logOut,
@@ -155,6 +174,7 @@ const useTestVocacional = () => {
     createUserStudent,
     getResultsByUserStudent,
     getStudents,
+    getUserStudentResults,
   };
 };
 

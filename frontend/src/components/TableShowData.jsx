@@ -8,24 +8,17 @@ import useApp from "../store/store";
 
 export const TableShowData = ({ columns, data, setFuncion, navigation }) => {
   const message = useApp((state) => state.message);
-  const location = useLocation();
 
   const navigate = useNavigate();
-  const [currentValue, setCurrentValue] = useState("");
   const [send, setSend] = useState(false);
 
   const handleUpdate = (row) => {
-    console.log(row.original);
-    //setFuncion(row.original);
-    //navigate(`${navigation}/${row.original.id}`);
-  };
-
-  const handleQuestionDelete = (row) => {
-    setCurrentValue(row.original);
-    document.getElementById("modal_delete").showModal();
+    setFuncion(row.original);
+    navigate(`${navigation}/${row.original.id_student}`);
   };
 
   
+
   const commonStyles = {
     color: "#111111",
   };
@@ -73,7 +66,6 @@ export const TableShowData = ({ columns, data, setFuncion, navigation }) => {
             "& .MuiSvgIcon-root": commonStyles,
           },
         }}
-        
         columns={columns}
         data={data}
         positionActionsColumn="last"

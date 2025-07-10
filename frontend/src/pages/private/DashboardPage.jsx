@@ -6,7 +6,7 @@ import { useMemo } from "react";
 import { TableShowData } from "../../components/TableShowData";
 
 export const DashboardPage = () => {
-  const navigation = "/datos-estudiante";
+  const navigation = "/reporte-estudiante";
   const { getStudents } = useTestVocacional();
   const setExistStudent = useApp((state) => state.setExistStudent);
 
