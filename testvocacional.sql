@@ -534,3 +534,65 @@ where u.rol_id = 1;
 
 
 select * from allstudents;
+
+
+-- Función que devuelve las sesiones de test por student_id
+CREATE OR REPLACE FUNCTION get_student_test_sessions(p_student_id INTEGER)
+RETURNS TABLE (
+    id_session INTEGER,
+    student_id INTEGER,
+    test_date TIMESTAMP WITH TIME ZONE,
+    total_score INTEGER,
+    dominant_area VARCHAR(50),
+    section VARCHAR(10),
+    interpretation TEXT
+) 
+LANGUAGE SQL
+STABLE
+AS $$
+    SELECT 
+        t.id AS id_session,
+        t.student_id,
+        t.test_date,
+        t.total_score,
+        t.dominant_area,
+        a.section,
+        a.interpretation
+    FROM test_sessions t
+    INNER JOIN areas a ON t.dominant_area = a.area
+    WHERE t.student_id = p_student_id;
+$$;
+
+
+SELECT * FROM get_student_test_sessions(8);
+
+-- Función que devuelve los resultados por sección según student_id
+CREATE OR REPLACE FUNCTION get_student_section_results(p_student_id INTEGER)
+RETURNS TABLE (
+    id INTEGER,
+    student_id INTEGER,
+    section_id VARCHAR(10),
+    session_id INTEGER,
+    score INTEGER,
+    level_interest VARCHAR(30),
+    area VARCHAR(50),
+    interpretation TEXT
+) 
+LANGUAGE SQL
+STABLE
+AS $$
+    SELECT 
+        s.id,
+        s.student_id,
+        s.section_id,
+        s.session_id,
+        s.score,
+        s.level_interest,
+        a.area,
+        a.interpretation
+    FROM section_results s
+    INNER JOIN areas a ON s.section_id = a.section
+    WHERE s.student_id = p_student_id;
+$$;
+
+SELECT * FROM get_student_section_results(7);
