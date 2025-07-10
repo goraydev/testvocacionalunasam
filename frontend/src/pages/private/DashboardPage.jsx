@@ -36,9 +36,10 @@ export const DashboardPage = () => {
     []
   );
 
-  const { isLoading, data } = useQuery({
+  const { isLoading, error, data } = useQuery({
     queryKey: ["students"],
     queryFn: getStudents,
+    staleTime: 1000 * 60 * 5, // Opcional: mejora performance
   });
 
   if (isLoading) {
@@ -49,20 +50,26 @@ export const DashboardPage = () => {
     );
   }
 
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="text-red-500">Error al cargar los estudiantes.</div>
+      </div>
+    );
+  }
+
   return (
     <>
       <BreadCrumbs />
       <div className="flex items-center gap-4">
         <h1 className="text-xl my-2 text-black">Tabla de Estudiantes</h1>
       </div>
-      {!isLoading && (
-        <TableShowData
-          columns={columns}
-          data={data}
-          setFuncion={setExistStudent}
-          navigation={navigation}
-        />
-      )}
+      <TableShowData
+        columns={columns}
+        data={Array.isArray(data) ? data : []}
+        setFuncion={setExistStudent}
+        navigation={navigation}
+      />
     </>
   );
 };
