@@ -41,7 +41,6 @@ export const ResultTestPage = () => {
           </div>
         </div>
       )}
-
       
       <section className="flex flex-col items-center justify-center">
         <h1 className="text-4xl text-center font-bold bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent my-4">

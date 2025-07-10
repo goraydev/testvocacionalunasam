@@ -115,6 +115,23 @@ const useTestVocacional = () => {
     }
   };
 
+  const getResultsByUserStudent = async () => {
+    try {
+      const { data } = await testVocacionalApi.get(
+        `/resultados/usuario/${user?.id}`
+      );
+
+      return data;
+    } catch (error) {
+      console.error(error);
+      setMessage({ ok: false, msg: error.response.data.message });
+      setTimeout(() => {
+        setMessage(null);
+      }, 3000);
+      return [];
+    }
+  };
+
   return {
     onLogin,
     logOut,
@@ -123,6 +140,7 @@ const useTestVocacional = () => {
     getAllEscalas,
     getAllQuestionsByEscala,
     createUserStudent,
+    getResultsByUserStudent,
   };
 };
 

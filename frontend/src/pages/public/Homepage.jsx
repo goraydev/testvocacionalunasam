@@ -1,9 +1,21 @@
 import { Link } from "react-router";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import useApp from "../../store/store";
 
 export const HomePage = () => {
+  const user = useApp((state) => state.user);
+
   return (
     <div className="flex flex-col justify-center items-center">
+      {user !== undefined && user?.rol_id === 1 && (
+        <Link
+          to={"/resultados-usuario"}
+          className="text-center my-10 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-3 text-lg font-semibold rounded-xl shadow-lg transform transition-all duration-200 hover:scale-105"
+        >
+          Ver mi resultado de test vocacional
+        </Link>
+      )}
+
       <h1 className="text-4xl text-center font-bold bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent my-10">
         Bienvenido a la aplicación de Test Vocacional UNASAM
       </h1>
