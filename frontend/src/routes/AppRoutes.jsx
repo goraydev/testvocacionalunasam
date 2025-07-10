@@ -6,8 +6,17 @@ import { Error404Page } from "../pages/Error404page";
 import { ResultTestPage } from "../pages/public/ResultTestpage";
 import { LoginPage } from "../pages/public/LoginPage";
 import { FormStudent } from "../pages/public/FormStudent";
+import useApp from "../store/store";
+import useTestVocacional from "../hooks/useTestVocacional";
+import { useEffect } from "react";
 
 const AppRoutes = () => {
+  const user = useApp((state) => state.user);
+  const { checkAuthToken } = useTestVocacional();
+  useEffect(() => {
+    checkAuthToken();
+  }, []);
+
   return (
     <Routes>
       <Route path="/" element={<Layout />}>

@@ -4,8 +4,8 @@ import useApp from "../../store/store";
 import { useNavigate } from "react-router";
 
 export const FormStudent = () => {
-  const setUser = useApp((state) => state.setUser);
-  const user = useApp((state) => state.user);
+  const setUserStudent = useApp((state) => state.setUserStudent);
+  const userStudent = useApp((state) => state.userStudent);
   const setMessage = useApp((state) => state.setMessage);
   const message = useApp((state) => state.message);
   const navigate = useNavigate();
@@ -33,7 +33,7 @@ export const FormStudent = () => {
       return;
     }
 
-    setUser({ estudiante, edad, grado });
+    setUserStudent({ estudiante, edad, grado });
     navigate("/preguntas");
   };
 
@@ -50,12 +50,12 @@ export const FormStudent = () => {
   }, [message]);
 
   useEffect(() => {
-    if (Object.values(user).length > 0) {
-      setEstudiante(user.estudiante);
-      setEdad(user.edad);
-      setGrado(user.grado);
+    if (Object.values(userStudent).length > 0) {
+      setEstudiante(userStudent.estudiante);
+      setEdad(userStudent.edad);
+      setGrado(userStudent.grado);
     }
-  }, [user]);
+  }, [userStudent]);
 
   return (
     <>

@@ -8,7 +8,7 @@ export const ResultTestPage = () => {
   const message = useApp((state) => state.message);
   const modalRef = useRef();
   const { createUserStudent } = useTestVocacional();
-  const user = useApp((state) => state.user);
+
   const { getAllQuestionsByEscala } = useTestVocacional();
   const { isLoading, data: sections = [] } = useQuery({
     queryKey: ["sections"],
@@ -30,9 +30,22 @@ export const ResultTestPage = () => {
 
   return (
     <>
+      {message !== null && (
+        <div className="z-20 fixed inset-x-0 top-4 px-4">
+          <div
+            className={`alert ${
+              message.ok ? "alert-success" : "alert-error"
+            } toast toast-top mt-4 toast-center w-80 max-w-full whitespace-normal overflow-hidden`}
+          >
+            <span className="text-base text-center">{message.msg}</span>
+          </div>
+        </div>
+      )}
+
+      
       <section className="flex flex-col items-center justify-center">
         <h1 className="text-4xl text-center font-bold bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent my-4">
-          {user?.estudiante} tu perfil es
+          {userStudent?.estudiante} tu perfil es
         </h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
           {sections?.map((section, index) => (
@@ -74,9 +87,9 @@ export const ResultTestPage = () => {
             Guardado exitosamente
           </h3>
           <p className="py-4">
-            Si quieres ver tus resultados, puedes iniciar sesión
-            con usuario <span className="font-bold">{userStudent?.user}</span> y
-            contraseña <span className="font-bold">{userStudent?.user}</span>
+            Si quieres ver tus resultados, puedes iniciar sesión con usuario{" "}
+            <span className="font-bold">{userStudent?.user}</span> y contraseña{" "}
+            <span className="font-bold">{userStudent?.user}</span>
           </p>
           <div className="modal-action">
             <form method="dialog">

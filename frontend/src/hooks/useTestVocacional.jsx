@@ -1,18 +1,60 @@
 import testVocacionalApi from "../api/testVocacionalApi";
 import useApp from "../store/store";
+import { useNavigate } from "react-router-dom";
 
 const useTestVocacional = () => {
   const maxSection = useApp((state) => state.maxSection);
   const user = useApp((state) => state.user);
+  const setUser = useApp((state) => state.setUser);
+  const userStudent = useApp((state) => state.userStudent);
   const answers = useApp((state) => state.answers);
   const sumSections = useApp((state) => state.sumSections);
   const setUserStudent = useApp((state) => state.setUserStudent);
   const setMessage = useApp((state) => state.setMessage);
-  const onLogin = (form) => {
+
+  const navigate = useNavigate();
+
+  const onLogin = async (form) => {
     try {
-      console.log(form);
+      const { data } = await testVocacionalApi.post("/login", form);
+      const { usuario, token } = data;
+      localStorage.setItem("token", token);
+      navigate("/", { replace: true });
+      setUser(usuario);
+      setMessage(null);
     } catch (error) {
       console.error(error);
+      const errorMsg =
+        error?.response?.data?.message ||
+        "Error al realizar el inicio de sesión";
+      setMessage({ ok: false, msg: errorMsg });
+      setTimeout(() => {
+        setMessage(null);
+      }, 3000);
+      throw new Error(`Error al iniciar sesión, ${errorMsg}`);
+    }
+  };
+
+  const logOut = () => {
+    localStorage.clear();
+    setUser(undefined);
+    navigate("/", { replace: true });
+  };
+
+  const checkAuthToken = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return logOut();
+    try {
+      const { data } = await testVocacionalApi.get("/renew");
+      localStorage.setItem("token", data.token);
+      setUser(data.usuario);
+
+      return data;
+    } catch (error) {
+      console.error(error);
+      logOut();
+      localStorage.clear();
+      throw new Error(`Error al regenerar token ${error}`);
     }
   };
 
@@ -52,13 +94,17 @@ const useTestVocacional = () => {
       const getDominantArea = getAreasBySection[0].area;
 
       const { data } = await testVocacionalApi.post(`/usuarios-estudiante`, {
-        user: { student: user.estudiante, age: user.edad, degree: user.grado },
+        user: {
+          student: userStudent.estudiante,
+          age: userStudent.edad,
+          degree: userStudent.grado,
+        },
         total_score_max: maxSection[0].score,
         getDominantArea,
         sumSections,
       });
 
-      setUserStudent(data);
+      setUserStudent({ ...userStudent, ...data });
     } catch (error) {
       console.error(error);
       setMessage({ ok: false, msg: error.response.data.message });
@@ -71,6 +117,8 @@ const useTestVocacional = () => {
 
   return {
     onLogin,
+    logOut,
+    checkAuthToken,
     getAllQuestions,
     getAllEscalas,
     getAllQuestionsByEscala,

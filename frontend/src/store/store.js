@@ -5,10 +5,10 @@ const useApp = create(
   zukeeper((set) => ({
     maxSection: {},
     message: null,
-    user: {},
+    user: undefined,
     answers: {},
     sumSections: {},
-    userStudent: null,
+    userStudent: {},
     setMessage: (payload) => set((state) => ({ message: payload })),
     setUser: (payload) => set((state) => ({ user: payload })),
     setMaxSections: (payload) => set((state) => ({ maxSection: payload })),
