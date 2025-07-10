@@ -114,3 +114,30 @@ export const createAccountUserStudent = async (req, res) => {
     res.status(500).json({ message: "Error al crear usuario estudiante" });
   }
 };
+
+
+export const getTestSessionByIdUser = (req, res) => {
+
+  const { id } = req.params;
+
+  try {
+
+    const query = `SELECT * FROM get_user_test_results_by_status($1)`;
+    pool.query(query, [id])
+      .then(result => {
+        if (result.rowCount === 0) {
+          return res.status(404).json({ message: "No se encontró la sesión de prueba" });
+        }
+        res.json(result.rows[0]);
+      })
+      .catch(error => {
+        console.error(error);
+        res.status(500).json({ message: "Error al obtener la sesión de prueba" });
+      });
+
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al obtener la sesión de prueba" });
+  }
+};
