@@ -128,7 +128,20 @@ const useTestVocacional = () => {
       setTimeout(() => {
         setMessage(null);
       }, 3000);
-      return [];
+      throw new Error(`Eror al traer resultados del usuario, ${error}`);
+    }
+  };
+
+  const getStudents = async () => {
+    try {
+      const { data } = await testVocacionalApi.get("/estudiantes");
+      return data;
+    } catch (error) {
+      console.error(error);
+      setMessage({ ok: false, msg: error.response.data.message });
+      setTimeout(() => {
+        setMessage(null);
+      }, 3000);
     }
   };
 
@@ -141,6 +154,7 @@ const useTestVocacional = () => {
     getAllQuestionsByEscala,
     createUserStudent,
     getResultsByUserStudent,
+    getStudents,
   };
 };
 

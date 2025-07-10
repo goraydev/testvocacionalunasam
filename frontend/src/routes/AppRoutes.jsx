@@ -10,6 +10,7 @@ import useApp from "../store/store";
 import useTestVocacional from "../hooks/useTestVocacional";
 import { useEffect } from "react";
 import { ResultsUserPage } from "../pages/private/ResultsUserPage";
+import { DashboardPage } from "../pages/private/DashboardPage";
 
 const AppRoutes = () => {
   const user = useApp((state) => state.user);
@@ -27,6 +28,11 @@ const AppRoutes = () => {
         <Route path="/resultado" element={<ResultTestPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/resultados-usuario" element={<ResultsUserPage />} />
+
+        {user && user?.rol === "administrador" && (
+          <Route path="/dashboard" element={<DashboardPage />} />
+        )}
+
         <Route path="/*" element={<Error404Page />} />
       </Route>
     </Routes>

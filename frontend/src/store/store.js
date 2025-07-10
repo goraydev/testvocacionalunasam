@@ -9,12 +9,14 @@ const useApp = create(
     answers: {},
     sumSections: {},
     userStudent: {},
+    existStudent: undefined,
     setMessage: (payload) => set((state) => ({ message: payload })),
     setUser: (payload) => set((state) => ({ user: payload })),
     setMaxSections: (payload) => set((state) => ({ maxSection: payload })),
     setAnswersStore: (payload) => set((state) => ({ answers: payload })),
     setSumSections: (payload) => set((state) => ({ sumSections: payload })),
     setUserStudent: (payload) => set((state) => ({ userStudent: payload })),
+    setExistStudent: (payload) => set((state) => ({ existStudent: payload })),
   }))
 );
 
