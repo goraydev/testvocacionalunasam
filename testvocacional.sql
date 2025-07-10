@@ -1,8 +1,8 @@
     -- Tabla de roles (sin dependencias)
-    CREATE TABLE IF NOT EXISTS "roles" (
+CREATE TABLE IF NOT EXISTS "roles" (
         "id" SERIAL PRIMARY KEY,
         "rol" VARCHAR(50) NOT NULL UNIQUE
-    );
+);
 
 -- Tabla de usuarios (depende de roles)
 CREATE TABLE IF NOT EXISTS "users" (
