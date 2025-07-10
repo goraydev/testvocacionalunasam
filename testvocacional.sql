@@ -514,3 +514,23 @@ $$;
 
 -- Ejemplos de uso:
 SELECT * FROM get_user_test_results_by_status(14);
+
+--VISTA DE TODOS LOS ESTUDIANTES CON INFORMACIÓN DEL USUARIO
+create or replace view allstudents AS
+select 
+	s.id as "id_student", 
+	s.student_name, 
+	s.age, 
+	s."degree", 
+	s.observations , 
+	u.id as "id_user",
+	u.username, 
+	u.email, 
+	u.is_active
+from students s
+inner join users u on s.user_id = u.id 
+where u.rol_id = 1;
+
+
+
+select * from allstudents;
