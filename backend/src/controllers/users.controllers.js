@@ -19,6 +19,7 @@ export const logIn = async (req, res) => {
       password,
       existUser.rows[0].password
     );
+
     if (!validatePassword) {
       return res.status(400).json({ message: "Credenciales Incorrectas" });
     }
