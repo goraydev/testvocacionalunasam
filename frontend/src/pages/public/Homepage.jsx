@@ -1,6 +1,6 @@
-import { Link } from "react-router";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import useApp from "../../store/store";
+import { Link } from "react-router-dom";
 
 export const HomePage = () => {
   const user = useApp((state) => state.user);

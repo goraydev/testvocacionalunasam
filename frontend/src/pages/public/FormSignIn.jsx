@@ -60,7 +60,7 @@ export const FormSignIn = () => {
               </label>
               <input
                 type="text"
-                className="grow placeholder-gray-500 input input-info input-lg bg-white w-full text-black"
+                className="grow placeholder-gray-500 input input-info input-md bg-white w-full text-black"
                 placeholder="Ingrese sus datos"
                 autoComplete="off"
                 id="username_id"
@@ -74,7 +74,7 @@ export const FormSignIn = () => {
               <label className="text-gray-800">Contraseña</label>
               <input
                 type="password"
-                className="grow placeholder-gray-500 input input-info input-lg bg-white w-full text-black"
+                className="grow placeholder-gray-500 input input-info input-md bg-white w-full text-black"
                 placeholder="Ingrese su password"
                 autoComplete="off"
                 name="password"

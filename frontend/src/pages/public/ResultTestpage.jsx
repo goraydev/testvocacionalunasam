@@ -35,13 +35,13 @@ export const ResultTestPage = () => {
           <div
             className={`alert ${
               message.ok ? "alert-success" : "alert-error"
-            } toast toast-top mt-4 toast-center w-80 max-w-full whitespace-normal overflow-hidden`}
+            } toast toast-center toast-middle mt-4  w-80 max-w-full whitespace-normal overflow-hidden`}
           >
             <span className="text-base text-center">{message.msg}</span>
           </div>
         </div>
       )}
-      
+
       <section className="flex flex-col items-center justify-center">
         <h1 className="text-4xl text-center font-bold bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent my-4">
           {userStudent?.estudiante} tu perfil es
@@ -81,7 +81,7 @@ export const ResultTestPage = () => {
         className="modal modal-middle sm:modal-middle"
         ref={modalRef}
       >
-        <div className="modal-box bg-gradient-to-r bg-gray-800 backdrop-blur-3xl ">
+        <div className="modal-box bg-gray-800">
           <h3 className="font-bold text-lg text-center">
             Guardado exitosamente
           </h3>

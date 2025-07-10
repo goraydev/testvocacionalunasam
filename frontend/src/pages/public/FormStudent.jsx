@@ -80,7 +80,7 @@ export const FormStudent = () => {
               </label>
               <input
                 type="text"
-                className="grow placeholder-gray-500 input input-info input-lg bg-white w-full text-black"
+                className="grow placeholder-gray-500 input input-info input-md bg-white w-full text-black"
                 placeholder="Ingrese sus datos"
                 autoComplete="off"
                 id="estudiante_id"
@@ -96,7 +96,7 @@ export const FormStudent = () => {
                 type="number"
                 min="12"
                 max="30"
-                className="grow placeholder-gray-500 input input-info input-lg bg-white w-full text-black"
+                className="grow placeholder-gray-500 input input-info input-md bg-white w-full text-black"
                 placeholder="Ingrese su edad"
                 autoComplete="off"
                 name="edad"
