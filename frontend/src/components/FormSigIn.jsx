@@ -50,7 +50,7 @@ export const FormSignIn = () => {
       <section className="grid md:grid-cols-2 items-center justify-center">
         <img src={SignIng} alt="Sign In" width={600} height={600} />
         <section>
-          <p className="flex items-center justify-center mt-6 text-center text-black">
+          <p className="flex items-center justify-center mt-6 text-center text-gray-800">
             "Inicia Sesión para ver los resultados del test vocacional"
           </p>
           <div

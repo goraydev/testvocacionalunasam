@@ -65,9 +65,6 @@ export const NavBar = () => {
                     <Link to={"/dashboard"}>Dashboard</Link>
                   </li>
                 )}
-                <li>
-                  <Link to={"/ajustes"}>Ajustes</Link>
-                </li>
 
                 <li>
                   <button onClick={handleLogout}>Cerrar Sesión</button>

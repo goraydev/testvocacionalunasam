@@ -106,7 +106,7 @@ export const GeneralReportsStudent = () => {
           }
         />
         <AlertCard
-          title="Fecha"
+          title="Fecha de evaluación"
           value={transformDate(data?.sessions?.[0]?.test_date)}
           icon={
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">

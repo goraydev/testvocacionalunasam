@@ -10,7 +10,7 @@ export const BreadCrumbs = () => {
           <h1 className="text-3xl text-gray-800">Dashboard</h1>
           <ul className="menu menu-horizontal px-1 gap-2">
             <li>
-              <Link to={"/dashboard"} className="btn btn-accent">
+              <Link to={"/dashboard"} className="btn btn-block">
                 Dashboard
               </Link>
             </li>

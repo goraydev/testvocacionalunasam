@@ -34,7 +34,7 @@ export const ChartsAreas = () => {
     );
   }
   return (
-    <LineChart width={800} height={300} data={data?.section_results}>
+    <LineChart width={600} height={300} data={data?.section_results}>
       <CartesianGrid stroke="#aaa" strokeDasharray="5 5" />
       <Line dataKey="score" stroke="#191a58" strokeWidth={3} name="Puntaje" />
       <XAxis dataKey="section_id" stroke="#151041" />
