@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { sumBySection } from "../../helpers/sumBySection";
 import useApp from "../../store/store";
-import { Link, useNavigate } from "react-router";
 import { getMaxSection } from "../../helpers/getMaxSection";
 import useTestVocacional from "../../hooks/useTestVocacional";
+import { Link, useNavigate } from "react-router-dom";
 
 export const QuestionsPage = () => {
   const setMaxSections = useApp((state) => state.setMaxSections);

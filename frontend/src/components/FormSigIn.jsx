@@ -74,7 +74,7 @@ export const FormSignIn = () => {
             className="flex flex-col gap-4 mt-4"
             onSubmit={handleSignIn}
           >
-            <label className="input input-info input-lg bg-white w-full text-black">
+            <label className="input input-info input-md bg-white w-full text-black">
               Usuario
               <input
                 type="text"
