@@ -3,6 +3,7 @@ import { PETITION_API_DEV, PETITION_API_PROD, PORT } from "./config.js";
 import authRoutes from "./routes/auth.routes.js";
 import publicRoutes from "./routes/public.routes.js";
 import userRoutes from "./routes/users.routes.js";
+import studentsRoutes from "./routes/students.routes.js"
 
 import morgan from "morgan";
 import cors from "cors";
@@ -37,6 +38,7 @@ app.use('/api', [authRoutes, publicRoutes]);
 
 //rutas privadas
 app.use('/api', verifyToken, checkRole(['administrador', 'estudiante']), userRoutes);
+app.use('/api', verifyToken, checkRole(['administrador']), [studentsRoutes]);
 
 app.listen(PORT);
 console.log(`servidor escuchando en el puerto ${PORT}`);
