@@ -17,8 +17,6 @@ export const TableShowData = ({ columns, data, setFuncion, navigation }) => {
     navigate(`${navigation}/${row.original.id_student}`);
   };
 
-  
-
   const commonStyles = {
     color: "#111111",
   };
