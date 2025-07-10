@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { sumBySection } from "../../helpers/sumBySection";
 import useApp from "../../store/store";
@@ -7,6 +7,7 @@ import useTestVocacional from "../../hooks/useTestVocacional";
 import { Link, useNavigate } from "react-router-dom";
 
 export const QuestionsPage = () => {
+  const headerRef = useRef(null);
   const setMaxSections = useApp((state) => state.setMaxSections);
   const setSumSections = useApp((state) => state.setSumSections);
   const setAnswersStore = useApp((state) => state.setAnswersStore);
@@ -50,6 +51,15 @@ export const QuestionsPage = () => {
     });
   };
 
+  const scrollToHeader = () => {
+    if (headerRef.current) {
+      const offset = 100; 
+      const top =
+        headerRef.current.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: "smooth" });
+    }
+  };
+
   const handleNext = () => {
     if (currentSection < sections.length - 1) {
       setCurrentSection((prev) => prev + 1);
@@ -72,6 +82,11 @@ export const QuestionsPage = () => {
     setMaxSections(maxSection);
     navigate("/resultado");
   };
+
+  // Opción 2: Usar useEffect para el scroll después del cambio de sección
+  useEffect(() => {
+    scrollToHeader();
+  }, [currentSection]);
 
   if (isLoading || isloadingScales) {
     return (
@@ -176,7 +191,7 @@ export const QuestionsPage = () => {
         <p className="text-black font-bold">Regresar</p>
       </Link>
       {/* Header */}
-      <div className="text-center mb-8 pt-8">
+      <div className="text-center mb-8 pt-8" id="header" ref={headerRef}>
         <div className="flex items-center justify-center mb-4">
           <svg
             xmlns="http://www.w3.org/2000/svg"
