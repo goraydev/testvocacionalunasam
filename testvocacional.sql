@@ -168,8 +168,8 @@ VALUES
 
 
 SELECT * FROM users;
-INSERT INTO users (username, email, password, rol_id)
-VALUES ('admin', 'jofre1236@gmail.com','admin1234', 1);
+INSERT INTO users (id, username, email, password, rol_id)
+VALUES (1,'admin', 'jofre1236@gmail.com','$2a$12$hygzBwReRb5AseyHK31.YOkVl/vBy3Zfttic.YgbbVB3zIJrMto6m', 2);
 
 
 SELECT * FROM areas;
@@ -435,3 +435,82 @@ SELECT insert_student_with_results(
   '[{"section_id":"A","score":21},{"section_id":"B","score":18}]'::JSON -- p_section_results
 );
 
+
+--VISTA DE USUARIO POR NOMBRE DE USUARIO
+CREATE OR REPLACE FUNCTION get_user_by_username(p_username TEXT)
+RETURNS TABLE (
+    id INT,
+    username VARCHAR(50),
+    email VARCHAR(100),
+	is_active BOOLEAN,
+	rol_id INTEGER,
+	rol VARCHAR(50),
+    created_at TIMESTAMP WITH TIME ZONE,
+    updated_at TIMESTAMP WITH TIME ZONE
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+    U.id, 
+    U.username, 
+    U.email, 
+    U.is_active,
+	U.rol_id,
+	R.rol,
+    U.created_at,
+    U.updated_at
+	FROM 
+		users U
+	INNER JOIN 
+		roles R ON U.rol_id = R.id
+	WHERE 
+		U.username = p_username;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Función alternativa que incluye filtro por id del ususario
+CREATE OR REPLACE FUNCTION get_user_test_results_by_status(
+    p_user_id INTEGER
+)
+RETURNS TABLE (
+    test_id INTEGER,
+    student_id INTEGER,
+    user_id INTEGER,
+    student_name VARCHAR(100),
+    age INTEGER,
+    degree INTEGER,
+    observations TEXT,
+    test_date TIMESTAMP WITH TIME ZONE,
+    status VARCHAR(20),
+    total_score INTEGER,
+    dominant_area VARCHAR(50),
+    section VARCHAR(10),
+    area VARCHAR(50),
+    interpretation TEXT
+) 
+LANGUAGE SQL
+STABLE
+AS $$
+    SELECT 
+        t.id AS test_id,
+        t.student_id,
+        s.user_id,
+        s.student_name,
+        s.age,
+        s.degree,
+        s.observations,
+        t.test_date,
+        t.status,
+        t.total_score,
+        t.dominant_area,
+        a.section,
+        a.area,
+        a.interpretation
+    FROM test_sessions t
+    INNER JOIN areas a ON t.dominant_area = a.area
+    INNER JOIN students s ON t.student_id = s.id
+    WHERE s.user_id = p_user_id;
+$$;
+
+-- Ejemplos de uso:
+SELECT * FROM get_user_test_results_by_status(14);
