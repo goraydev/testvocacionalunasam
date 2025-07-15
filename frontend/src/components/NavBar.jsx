@@ -10,7 +10,7 @@ export const NavBar = () => {
   };
 
   return (
-    <nav className="navbar rounded-md sticky top-0 z-20 bg-gray-800 backdrop-blur-3xl border-b-2 border-b-gray-700">
+    <nav className="navbar rounded-md sticky top-0 z-20 bg-gray-800 backdrop-blur-3xl border-b-2 border-b-gray-700 md:px-8">
       <div className="container mx-auto flex justify-between">
         <Link to={"/"} className="flex items-center gap-4">
           <i className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 shadow-xl shadow-cyan-500/25 transition-color p-2 rounded-md">
