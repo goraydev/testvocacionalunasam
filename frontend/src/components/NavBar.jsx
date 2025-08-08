@@ -66,6 +66,12 @@ export const NavBar = () => {
                   </li>
                 )}
 
+                {user && (
+                  <li>
+                    <Link to={"/ajustes"}>Ajustes</Link>
+                  </li>
+                )}
+
                 <li>
                   <button onClick={handleLogout}>Cerrar Sesión</button>
                 </li>

@@ -59,6 +59,24 @@ const useTestVocacional = () => {
     }
   };
 
+  const changePassword = async (form) => {
+    try {
+      const { data } = await testVocacionalApi.put(
+        `/cambiar-password/${user?.id}`,
+        form
+      );
+
+      setMessage({ ok: true, msg: data.message });
+    } catch (error) {
+      console.error(error);
+      setMessage({ ok: false, msg: error.response.data.message });
+      setTimeout(() => {
+        setMessage(null);
+      }, 3000);
+      throw new Error(`Error al cambiar la contraseña, ${error}`);
+    }
+  };
+
   const getAllQuestions = async () => {
     try {
       const { data } = await testVocacionalApi.get("/preguntas");
@@ -148,13 +166,13 @@ const useTestVocacional = () => {
 
   const getUserStudentResults = async () => {
     const { id_student } = existStudent;
-    
+
     try {
-       const { data } = await testVocacionalApi.get(
+      const { data } = await testVocacionalApi.get(
         `/estudiantes/${id_student}/reporte`
       );
-      
-      return data; 
+
+      return data;
     } catch (error) {
       console.error(error);
       setMessage({ ok: false, msg: error.response.data.message });
@@ -168,6 +186,7 @@ const useTestVocacional = () => {
     onLogin,
     logOut,
     checkAuthToken,
+    changePassword,
     getAllQuestions,
     getAllEscalas,
     getAllQuestionsByEscala,
