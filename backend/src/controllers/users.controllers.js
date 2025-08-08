@@ -115,29 +115,54 @@ export const createAccountUserStudent = async (req, res) => {
   }
 };
 
-
 export const getTestSessionByIdUser = (req, res) => {
-
   const { id } = req.params;
 
   try {
-
     const query = `SELECT * FROM get_user_test_results_by_status($1)`;
-    pool.query(query, [id])
-      .then(result => {
+    pool
+      .query(query, [id])
+      .then((result) => {
         if (result.rowCount === 0) {
-          return res.status(404).json({ message: "No se encontró la sesión de prueba" });
+          return res
+            .status(404)
+            .json({ message: "No se encontró la sesión de prueba" });
         }
         res.json(result.rows[0]);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
-        res.status(500).json({ message: "Error al obtener la sesión de prueba" });
+        res
+          .status(500)
+          .json({ message: "Error al obtener la sesión de prueba" });
       });
-
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error al obtener la sesión de prueba" });
+  }
+};
+
+export const changePassword = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { newpassword } = req.body;
+
+    const salt = bcrypt.genSaltSync();
+    const passwordHash = bcrypt.hashSync(newpassword, salt);
+
+    const result = await pool.query(
+      `UPDATE users SET password = $1 WHERE id = $2`,
+      [passwordHash, id]
+    );
+
+    if (result.rowCount === 0) {
+      return res
+        .status(404)
+        .json({ message: "No se encontró la sesión de prueba" });
+    }
+    res.json({ message: "Contraseña cambiada" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al cambiar la contraseña" });
   }
 };
