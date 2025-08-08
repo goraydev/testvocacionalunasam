@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import { ResultsUserPage } from "../pages/private/ResultsUserPage";
 import { DashboardPage } from "../pages/private/DashboardPage";
 import { GeneralReportsStudent } from "../pages/private/GeneralReportsStudent";
+import { Settings } from "../pages/private/Settings";
 
 const AppRoutes = () => {
   const user = useApp((state) => state.user);
@@ -37,6 +38,12 @@ const AppRoutes = () => {
               path="/reporte-estudiante/:id_student"
               element={<GeneralReportsStudent />}
             />
+          </>
+        )}
+
+        {user && (
+          <>
+            <Route path="/ajustes" element={<Settings />} />
           </>
         )}
 
