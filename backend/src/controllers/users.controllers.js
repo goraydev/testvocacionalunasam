@@ -147,6 +147,12 @@ export const changePassword = async (req, res) => {
     const { id } = req.params;
     const { newpassword } = req.body;
 
+    if (newpassword.length < 8) {
+      return res.status(400).json({
+        message: "La nueva contraseña debe tener al menos 8 caracteres",
+      });
+    }
+
     const salt = bcrypt.genSaltSync();
     const passwordHash = bcrypt.hashSync(newpassword, salt);
 
