@@ -11,10 +11,25 @@ export const Settings = () => {
   const setMessage = useApp((state) => state.setMessage);
   const user = useApp((state) => state.user);
   const message = useApp((state) => state.message);
-  const { changePassword, changeEmail } = useTestVocacional();
+  const { changePassword, changeEmail, changeUserName } = useTestVocacional();
   const [newPassword, setNewPassword] = useState("");
   const [repeatNewPassword, setRepeatNewPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [username, setUserName] = useState("");
+
+  const handleUserName = (e) => {
+    e.preventDefault();
+
+    if (username === "") {
+      setMessage({
+        ok: false,
+        msg: "Campo Nombre de Usuario es obligatorio",
+      });
+      return;
+    }
+
+    changeUserName({ username });
+  };
 
   const handleEmail = (e) => {
     e.preventDefault();
@@ -74,6 +89,7 @@ export const Settings = () => {
 
   useEffect(() => {
     setEmail(user.email);
+    setUserName(user.username);
   }, [user]);
 
   return (
@@ -99,36 +115,67 @@ export const Settings = () => {
         </div>
       ) : null}
       <section className="grid md:grid-cols-2 gap-8 justify-center">
-        <form
-          action=""
-          className="flex flex-col gap-4 mt-4"
-          onSubmit={handleEmail}
-        >
-          <h2 className="text-black text-xl">Registrar Email</h2>
-          <div>
-            <label className="text-gray-800" id="username_id"></label>
-            <input
-              type="email"
-              className="grow placeholder-gray-500 input input-info input-md bg-white w-full text-black"
-              placeholder="Registrar email para en caso de olvido de contraseña"
-              autoComplete="off"
-              id="email_id"
-              value={email}
-              name="email"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <button
-            className="btn inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-10 px-4 py-2 text-white border-0 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 shadow-lg shadow-cyan-500/25 transition-color"
-            type="submit"
+        <div className="flex flex-col gap-4">
+          <form
+            action=""
+            className="flex flex-col gap-4 mt-4"
+            onSubmit={handleUserName}
           >
-            {email !== "" ? (
-              <span>Cambiar Email</span>
-            ) : (
-              <span>Registrar Email</span>
-            )}
-          </button>
-        </form>
+            <h2 className="text-black text-xl">Actualizar Usuario</h2>
+            <div>
+              <label className="text-gray-800" id="username_id">
+                Nombre de usuario
+              </label>
+              <input
+                type="text"
+                className="grow placeholder-gray-500 input input-info input-md bg-white w-full text-black"
+                placeholder="Registrar email para en caso de olvido de contraseña"
+                autoComplete="off"
+                id="username_id"
+                value={username}
+                name="username"
+                onChange={(e) => setUserName(e.target.value)}
+              />
+            </div>
+            <button
+              className="btn inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-10 px-4 py-2 text-white border-0 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 shadow-lg shadow-cyan-500/25 transition-color"
+              type="submit"
+            >
+              <span>Actualizar</span>
+            </button>
+          </form>
+          <form
+            action=""
+            className="flex flex-col gap-4 mt-4"
+            onSubmit={handleEmail}
+          >
+            <div>
+              <label className="text-gray-800" id="username_id">
+                Email
+              </label>
+              <input
+                type="email"
+                className="grow placeholder-gray-500 input input-info input-md bg-white w-full text-black"
+                placeholder="Registrar email para en caso de olvido de contraseña"
+                autoComplete="off"
+                id="email_id"
+                value={email}
+                name="email"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            <button
+              className="btn inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-10 px-4 py-2 text-white border-0 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 shadow-lg shadow-cyan-500/25 transition-color"
+              type="submit"
+            >
+              {email !== "" ? (
+                <span>Cambiar Email</span>
+              ) : (
+                <span>Registrar Email</span>
+              )}
+            </button>
+          </form>
+        </div>
         <form
           action=""
           className="flex flex-col gap-4 mt-4"

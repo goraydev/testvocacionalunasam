@@ -194,3 +194,36 @@ export const changeEmail = async (req, res) => {
     res.status(500).json({ message: "Error al registrar el email" });
   }
 };
+
+export const changeUserName = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { username } = req.body;
+
+    const user = await pool.query("SELECT * FROM users WHERE username = $1", [
+      username,
+    ]);
+
+    if (username.length < 8) {
+      return res.status(400).json({
+        message: "El nombre de usuario debe tener al menos 8 caracteres",
+      });
+    }
+
+    if (user.rowCount) {
+      return res
+        .status(404)
+        .json({ message: "El nombre de usuario ya está registrado" });
+    }
+
+    await pool.query(`UPDATE users SET username = $1 WHERE id = $2`, [
+      username,
+      id,
+    ]);
+
+    res.json({ username, message: "Nombre de usuario actualizado" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al cambiar el nombre de usuario" });
+  }
+};
