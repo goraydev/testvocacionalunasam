@@ -77,6 +77,21 @@ const useTestVocacional = () => {
     }
   };
 
+  const changeEmail = async (form) => {
+    try {
+      const { data } = await testVocacionalApi.put(`/email/${user?.id}`, form);
+
+      setUser({ ...user, email: data.email });
+      setMessage({ ok: true, msg: data.message });
+    } catch (error) {
+      console.error(error);
+      setMessage({ ok: false, msg: error.response.data.message });
+      setTimeout(() => {
+        setMessage(null);
+      }, 3000);
+      throw new Error(`Error al cambiar el email, ${error}`);
+    }
+  };
   const getAllQuestions = async () => {
     try {
       const { data } = await testVocacionalApi.get("/preguntas");
@@ -187,6 +202,7 @@ const useTestVocacional = () => {
     logOut,
     checkAuthToken,
     changePassword,
+    changeEmail,
     getAllQuestions,
     getAllEscalas,
     getAllQuestionsByEscala,

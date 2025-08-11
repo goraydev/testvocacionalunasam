@@ -172,3 +172,25 @@ export const changePassword = async (req, res) => {
     res.status(500).json({ message: "Error al cambiar la contraseña" });
   }
 };
+
+export const changeEmail = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { email } = req.body;
+
+    const user = await pool.query("SELECT * FROM users WHERE email = $1", [
+      email,
+    ]);
+
+    if (user.rowCount) {
+      return res.status(404).json({ message: "El email ya está registrado" });
+    }
+
+    await pool.query(`UPDATE users SET email = $1 WHERE id = $2`, [email, id]);
+
+    res.json({ email, message: "Email registrado" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al registrar el email" });
+  }
+};

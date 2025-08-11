@@ -5,12 +5,37 @@ import useApp from "../../store/store";
 import { useEffect } from "react";
 import { useState } from "react";
 
+let regex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
+
 export const Settings = () => {
   const setMessage = useApp((state) => state.setMessage);
   const message = useApp((state) => state.message);
-  const { changePassword } = useTestVocacional();
+  const { changePassword, changeEmail } = useTestVocacional();
   const [newPassword, setNewPassword] = useState("");
   const [repeatNewPassword, setRepeatNewPassword] = useState("");
+  const [email, setEmail] = useState("");
+
+  const handleEmail = (e) => {
+    e.preventDefault();
+
+    if (email === "") {
+      setMessage({
+        ok: false,
+        msg: "Campo Email es obligatorio",
+      });
+      return;
+    }
+
+    if (!regex.test(email)) {
+      setMessage({
+        ok: false,
+        msg: "El email ingresado no es valido",
+      });
+      return;
+    }
+
+    changeEmail({ email });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -52,63 +77,91 @@ export const Settings = () => {
       <div className="flex items-center gap-4">
         <h1 className="text-2xl my-2 text-black">Ajustes</h1>
       </div>
-
-      <form
-        action=""
-        className="flex flex-col gap-4 mt-4 md:w-1/2"
-        onSubmit={handleSubmit}
-      >
-        <h2 className="text-black text-xl">Cambiar Contraseña</h2>
-        {message !== null && !message.ok ? (
-          <div className="z-20 bg-red-500 rounded-md my-4">
-            <div className="alert alert-error">
-              <span>{message.msg}</span>
-            </div>
+      {message !== null && !message.ok ? (
+        <div className="z-20 bg-red-500 rounded-md my-4">
+          <div className="alert alert-error">
+            <span>{message.msg}</span>
           </div>
-        ) : null}
+        </div>
+      ) : null}
 
-        {message !== null && message.ok ? (
-          <div className="z-20 bg-gree-500 rounded-md my-4">
-            <div className="alert alert-success">
-              <span>{message.msg}</span>
-            </div>
+      {message !== null && message.ok ? (
+        <div className="z-20 bg-gree-500 rounded-md my-4">
+          <div className="alert alert-success">
+            <span>{message.msg}</span>
           </div>
-        ) : null}
-        <div>
-          <label className="text-gray-800" id="username_id">
-            Nueva Contraseña
-          </label>
-          <input
-            type="password"
-            className="grow placeholder-gray-500 input input-info input-md bg-white w-full text-black"
-            placeholder="Crea nueva contraseña"
-            autoComplete="off"
-            id="password_id"
-            name="password"
-            onChange={(e) => setNewPassword(e.target.value)}
-          />
         </div>
-        <div>
-          <label className="text-gray-800" id="username_id">
-            Repetir Nueva Contraseña
-          </label>
-          <input
-            type="password"
-            className="grow placeholder-gray-500 input input-info input-md bg-white w-full text-black"
-            placeholder="Repite nueva contraseña"
-            autoComplete="off"
-            id="password_id2"
-            name="password"
-            onChange={(e) => setRepeatNewPassword(e.target.value)}
-          />
-        </div>
-        <button
-          className="btn inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-10 px-4 py-2 text-white border-0 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 shadow-lg shadow-cyan-500/25 transition-color"
-          type="submit"
+      ) : null}
+      <section className="grid md:grid-cols-2 gap-8 justify-center">
+        <form
+          action=""
+          className="flex flex-col gap-4 mt-4"
+          onSubmit={handleEmail}
         >
-          Cambiar Contraseña
-        </button>
-      </form>
+          <h2 className="text-black text-xl">Registrar Email</h2>
+          <div>
+            <label className="text-gray-800" id="username_id">
+              Email
+            </label>
+            <input
+              type="email"
+              className="grow placeholder-gray-500 input input-info input-md bg-white w-full text-black"
+              placeholder="Registrar email para en caso de olvido de contraseña"
+              autoComplete="off"
+              id="email_id"
+              name="email"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <button
+            className="btn inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-10 px-4 py-2 text-white border-0 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 shadow-lg shadow-cyan-500/25 transition-color"
+            type="submit"
+          >
+            Registrar
+          </button>
+        </form>
+        <form
+          action=""
+          className="flex flex-col gap-4 mt-4"
+          onSubmit={handleSubmit}
+        >
+          <h2 className="text-black text-xl">Cambiar Contraseña</h2>
+          <div>
+            <label className="text-gray-800" id="username_id">
+              Nueva Contraseña
+            </label>
+            <input
+              type="password"
+              className="grow placeholder-gray-500 input input-info input-md bg-white w-full text-black"
+              placeholder="Crea nueva contraseña"
+              autoComplete="off"
+              id="password_id"
+              name="password"
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+          </div>
+          <div>
+            <label className="text-gray-800" id="username_id">
+              Repetir Nueva Contraseña
+            </label>
+            <input
+              type="password"
+              className="grow placeholder-gray-500 input input-info input-md bg-white w-full text-black"
+              placeholder="Repite nueva contraseña"
+              autoComplete="off"
+              id="password_id2"
+              name="password"
+              onChange={(e) => setRepeatNewPassword(e.target.value)}
+            />
+          </div>
+          <button
+            className="btn inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-10 px-4 py-2 text-white border-0 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 shadow-lg shadow-cyan-500/25 transition-color"
+            type="submit"
+          >
+            Cambiar Contraseña
+          </button>
+        </form>
+      </section>
     </>
   );
 };
