@@ -22,7 +22,6 @@ export const FormResetPassword = () => {
 
     resetPassword({ newpassword: newPassword, token });
     setNewPassword("");
-    
   };
 
   return (
@@ -64,6 +63,7 @@ export const FormResetPassword = () => {
                 autoComplete="off"
                 id="password_id"
                 name="password"
+                value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
               />
             </div>
