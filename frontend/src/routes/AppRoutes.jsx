@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router";
+import { Route, Routes, useLocation } from "react-router";
 import Layout from "../layout/Layout";
 import { HomePage } from "../pages/public/Homepage";
 import { QuestionsPage } from "../pages/public/Questionspage";
@@ -13,13 +13,30 @@ import { ResultsUserPage } from "../pages/private/ResultsUserPage";
 import { DashboardPage } from "../pages/private/DashboardPage";
 import { GeneralReportsStudent } from "../pages/private/GeneralReportsStudent";
 import { Settings } from "../pages/private/Settings";
+import { FormRecovery } from "../pages/public/FormRecovery";
+import { FormResetPassword } from "../pages/public/FormResetPassword";
 
 const AppRoutes = () => {
   const user = useApp((state) => state.user);
   const { checkAuthToken } = useTestVocacional();
+  const location = useLocation();
   useEffect(() => {
-    checkAuthToken();
-  }, []);
+    const publicRoutes = [
+      "/",
+      "/login",
+      "/recuperar",
+      "/recuperar-password",
+      "/preguntas",
+      "/resultado",
+      "/datos-generales",
+    ];
+    // Verifica si la ruta actual es pública
+    const isPublicRoute = publicRoutes.some((route) =>
+      location.pathname.startsWith(route)
+    );
+
+    checkAuthToken(isPublicRoute);
+  }, [location.pathname]);
 
   return (
     <Routes>
@@ -29,7 +46,12 @@ const AppRoutes = () => {
         <Route path="/preguntas" element={<QuestionsPage />} />
         <Route path="/resultado" element={<ResultTestPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/recuperar" element={<FormRecovery />} />
         <Route path="/resultados-usuario" element={<ResultsUserPage />} />
+        <Route
+          path="/recuperar-password/:token"
+          element={<FormResetPassword />}
+        />
 
         {user && user?.rol === "administrador" && (
           <>

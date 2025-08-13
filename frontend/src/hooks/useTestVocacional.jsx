@@ -42,9 +42,14 @@ const useTestVocacional = () => {
     navigate("/", { replace: true });
   };
 
-  const checkAuthToken = async () => {
+  const checkAuthToken = async (isPublicRoute = false) => {
     const token = localStorage.getItem("token");
-    if (!token) return logOut();
+
+    if (!token) {
+      if (isPublicRoute) return; // Si es pública, no hago logOut
+      return logOut();
+    }
+
     try {
       const { data } = await testVocacionalApi.get("/renew");
       localStorage.setItem("token", data.token);
@@ -64,6 +69,90 @@ const useTestVocacional = () => {
       const { data } = await testVocacionalApi.put(
         `/cambiar-password/${user?.id}`,
         form
+      );
+
+      setMessage({ ok: true, msg: data.message });
+    } catch (error) {
+      console.error(error);
+      setMessage({ ok: false, msg: error.response.data.message });
+      setTimeout(() => {
+        setMessage(null);
+      }, 3000);
+      throw new Error(`Error al cambiar la contraseña, ${error}`);
+    }
+  };
+
+  const changeEmail = async (form) => {
+    try {
+      const { data } = await testVocacionalApi.put(`/email/${user?.id}`, form);
+
+      setUser({ ...user, email: data.email });
+      setMessage({ ok: true, msg: data.message });
+    } catch (error) {
+      console.error(error);
+      setMessage({ ok: false, msg: error.response.data.message });
+      setTimeout(() => {
+        setMessage(null);
+      }, 3000);
+      throw new Error(`Error al cambiar el email, ${error}`);
+    }
+  };
+
+  const changeUserName = async (form) => {
+    try {
+      const { data } = await testVocacionalApi.put(
+        `/cambiar-username/${user?.id}`,
+        form
+      );
+
+      setUser({ ...user, username: data.username });
+      setMessage({ ok: true, msg: data.message });
+    } catch (error) {
+      console.error(error);
+      setMessage({ ok: false, msg: error.response.data.message });
+      setTimeout(() => {
+        setMessage(null);
+      }, 3000);
+      throw new Error(`Error al cambiar el nombre de usuario, ${error}`);
+    }
+  };
+
+  const recuperarPassword = async (form) => {
+    try {
+      const { data } = await testVocacionalApi.post(
+        "/recuperar-password",
+        form
+      );
+
+      setMessage({ ok: true, msg: data.message });
+    } catch (error) {
+      console.error(error);
+      setMessage({ ok: false, msg: error.response.data.message });
+      setTimeout(() => {
+        setMessage(null);
+      }, 3000);
+      throw new Error(`Error al recuperar la contraseña, ${error}`);
+    }
+  };
+
+  const resetPassword = async (form) => {
+    const { newpassword, token } = form;
+
+    if (token === "") {
+      setMessage({ ok: false, msg: "Token requerido" });
+      return;
+    }
+
+    try {
+      const { data } = await testVocacionalApi.post(
+        `/cambiar-password`,
+        { password: newpassword },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "x-token": token,
+          },
+        }
       );
 
       setMessage({ ok: true, msg: data.message });
@@ -187,6 +276,10 @@ const useTestVocacional = () => {
     logOut,
     checkAuthToken,
     changePassword,
+    changeEmail,
+    changeUserName,
+    recuperarPassword,
+    resetPassword,
     getAllQuestions,
     getAllEscalas,
     getAllQuestionsByEscala,
