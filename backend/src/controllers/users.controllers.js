@@ -1,7 +1,10 @@
 import { pool } from "../db.js";
+import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import { SECRET_JWT_SEED } from "../config.js";
 import { generarJWT } from "../helpers/jwt.js";
 import { createUserNameStudent } from "../helpers/createUserNameStudent.js";
+import { emailHelper } from "../helpers/emailHelpers.js";
 
 export const logIn = async (req, res) => {
   const { username, password } = req.body;
@@ -225,5 +228,75 @@ export const changeUserName = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error al cambiar el nombre de usuario" });
+  }
+};
+
+export const recoverPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await pool.query("SELECT * FROM users WHERE email = $1", [
+      email,
+    ]);
+
+    if (user.rowCount === 0) {
+      return res.status(404).json({ message: "Email no encontrado" });
+    }
+
+    const token = await generarJWT(
+      user.rows[0].id,
+      user.rows[0].username,
+      user.rows[0].rol
+    );
+
+    await emailHelper(
+      email,
+      `Recuperar contraseña`,
+      "<p>Para recuperar tu contraseña sigue el siguiente enlace: <a href='http://localhost:5173/recuperar-password/" +
+        token +
+        "'>http://localhost:5173/recuperar-password/" +
+        token +
+        "</a></p>"
+    );
+    res.json({ message: "Te acabamos de enviar un mensaje a tu email", token });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al enviar el email" });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(" ")[1];
+    const { password } = req.body;
+
+    if (password.length < 8) {
+      return res.status(400).json({
+        message: "La nueva contraseña debe tener al menos 8 caracteres",
+      });
+    }
+
+    if (!token) return res.status(400).json({ message: "Token requerido" });
+    if (!password)
+      return res.status(400).json({ message: "Contraseña requerida" });
+
+    const decoded = jwt.verify(token, SECRET_JWT_SEED);
+
+    //Encriptar password
+    const salt = bcrypt.genSaltSync();
+    const hashedPassword = bcrypt.hashSync(password, salt);
+
+    await pool.query("UPDATE users SET password = $1 WHERE id = $2", [
+      hashedPassword,
+      decoded.id,
+    ]);
+
+    res.json({
+      message:
+        "Contraseña actualizada correctamente, ya puedes iniciar sesión con tu contraseña nueva",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al cambiar la contraseña" });
   }
 };

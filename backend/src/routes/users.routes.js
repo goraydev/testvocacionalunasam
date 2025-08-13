@@ -4,6 +4,7 @@ import {
   changePassword,
   changeUserName,
   getTestSessionByIdUser,
+  recoverPassword,
 } from "../controllers/users.controllers.js";
 
 const router = Router();
