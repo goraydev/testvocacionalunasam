@@ -5,6 +5,7 @@ import { SECRET_JWT_SEED } from "../config.js";
 import { generarJWT } from "../helpers/jwt.js";
 import { createUserNameStudent } from "../helpers/createUserNameStudent.js";
 import { emailHelper } from "../helpers/emailHelpers.js";
+import { TemplateEmail } from "../helpers/templateEmail.js";
 
 export const logIn = async (req, res) => {
   const { username, password } = req.body;
@@ -249,15 +250,11 @@ export const recoverPassword = async (req, res) => {
       user.rows[0].rol
     );
 
-    await emailHelper(
-      email,
-      `Recuperar contraseña`,
-      "<p>Para recuperar tu contraseña sigue el siguiente enlace: <a href='http://localhost:5173/recuperar-password/" +
-        token +
-        "'>http://localhost:5173/recuperar-password/" +
-        token +
-        "</a></p>"
-    );
+    const url = `http://localhost:5173/recuperar-password/${token}`;
+    const html = TemplateEmail(url);
+
+    await emailHelper(email, `Recuperar contraseña Test Vocacional`, html);
+
     res.json({ message: "Te acabamos de enviar un mensaje a tu email", token });
   } catch (error) {
     console.error(error);
